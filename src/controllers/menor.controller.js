@@ -7,23 +7,30 @@ export const getMenores = async (req, res) => {
 };
 
 export const createMenor = async (req, res) => {
-
-   const { nombres, apellidos, tipoIdentificacion, numeroIdentificacion, edad, telefono, correo } = req.body
-
-   const newMenor = new Menor({
-
-    nombres,
-    apellidos,
-    tipoIdentificacion,
-    numeroIdentificacion,
-    edad,
-    telefono,
-    correo
-   });
-   const savedMenor = await newMenor.save();
-   res.json(savedMenor);
-    
-};
+    try {
+      // Obtén el ID del tutor autenticado desde req.user.id
+      const tutorId = req.user.id;
+  
+      const { nombres, apellidos, tipoIdentificacion, numeroIdentificacion, edad, telefono, correo } = req.body;
+  
+      const newMenor = new Menor({
+        tutor: tutorId, // Asocia el menor con el tutor
+        nombres,
+        apellidos,
+        tipoIdentificacion,
+        numeroIdentificacion,
+        edad,
+        telefono,
+        correo,
+      });
+  
+      const savedMenor = await newMenor.save();
+      res.status(201).json(savedMenor);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  };
 
 export const getMenor = async (req, res) => {
 

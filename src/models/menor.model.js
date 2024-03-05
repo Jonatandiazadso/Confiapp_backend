@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
 const menorSchema = new mongoose.Schema({
+    tutor: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
+
     nombres: {
         type: String,
         required: true
